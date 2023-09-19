@@ -63,16 +63,17 @@ CMD ["php-fpm"]
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
-COPY --from=composer_upstream --link /composer /usr/bin/composer
+COPY --from=composer_upstream --link /composer /usr/bin/composockerxdebnug
+
 
 
 # Dev PHP image
 FROM php_base AS php_dev
 
-ENV APP_ENV=dev XDEBUG_MODE=off
+ENV APP_ENV=dev XDEBUG_MODE=on
 VOLUME /srv/app/var/
 
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.dev.ini" "$PHP_INI_DIR/php.ini"
 
 RUN set -eux; \
 	install-php-extensions \

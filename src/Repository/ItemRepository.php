@@ -21,6 +21,16 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
+    public function reduceStock(Item $item): void
+    {
+        $qb = $this->createQueryBuilder('i');
+        $qb->update('App\Entity\Item', 'i');
+        $qb->set('i.stock', 'i.stock - 1');
+        $qb->where('i.stock > 0');
+        $qb->where('i.id = :id');
+        $qb->setParameter('id', $item->getId());
+        $qb->getQuery()->execute();
+    }
 //    /**
 //     * @return Item[] Returns an array of Item objects
 //     */

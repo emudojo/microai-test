@@ -19,7 +19,7 @@ You are tasked with building an online marketplace platform that connects buyers
 ### Listing Items
 
 - ~~Sellers can list items for sale, providing details such as title, description, price, product expiry date, and upload images.~~
-- Implement image upload and storage.
+- ~~Implement image upload and storage.~~
 
 ### Item Listings
 
@@ -28,14 +28,14 @@ You are tasked with building an online marketplace platform that connects buyers
 
 ### Checkout and Orders
 
-- Implement a checkout process where users can place orders for items in their cart.
-- Create an order record in the database with details like the order date, user information, and item details.
-- Deduct the purchased items from the available quantities.
+- ~~Implement a checkout process where users can place orders for items in their cart.~~
+- ~~Create an order record in the database with details like the order date, user information, and item details.~~
+- ~~Deduct the purchased items from the available quantities.~~
 
 ### Bonus Task
 
 #### Shopping Cart
 
-- Allow users to add items to their shopping cart, view the cart, and remove items.
-- Implement the calculation of the total cost of items in the cart.
+- ~~Allow users to add items to their shopping cart, view the cart~~, and remove items.
+- ~~Implement the calculation of the total cost of items in the cart.~~
 - Remove the products after the expiry date has passed.

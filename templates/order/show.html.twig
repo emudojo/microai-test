@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1>Order</h1>
-
-    <table class="table">
-        <tbody>
+    <div class="table-container">
+        <table class="table">
+            <tbody>
             <tr>
                 <th>Id</th>
                 <td>{{ order.id }}</td>
@@ -15,12 +15,16 @@
                 <th>Total</th>
                 <td>{{ order.total }}</td>
             </tr>
-        </tbody>
-    </table>
-
+            <tr>
+                <th>Items</th>
+                <td>
+                    {% for item in order.orderItems %}
+                        <li>{{ item.item.title }}, {{ item.price }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <a href="{{ path('app_order_index') }}">back to list</a>
-
-    <a href="{{ path('app_order_edit', {'id': order.id}) }}">edit</a>
-
-    {{ include('order/_delete_form.html.twig') }}
 {% endblock %}

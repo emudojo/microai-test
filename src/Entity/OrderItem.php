@@ -13,15 +13,20 @@ class OrderItem
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Item $orderId = null;
-
     #[ORM\Column]
     private ?int $quantity = null;
 
     #[ORM\Column]
     private ?float $price = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orderItems')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Order $orderId = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orderItems')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Item $item = null;
+
 
     public function getId(): ?int
     {
@@ -35,17 +40,6 @@ class OrderItem
         return $this;
     }
 
-    public function getOrderId(): ?Item
-    {
-        return $this->orderId;
-    }
-
-    public function setOrderId(Item $orderId): static
-    {
-        $this->orderId = $orderId;
-
-        return $this;
-    }
 
     public function getQuantity(): ?int
     {
@@ -67,6 +61,30 @@ class OrderItem
     public function setPrice(float $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getOrderId(): ?Order
+    {
+        return $this->orderId;
+    }
+
+    public function setOrderId(?Order $orderId): static
+    {
+        $this->orderId = $orderId;
+
+        return $this;
+    }
+
+    public function getItem(): ?Item
+    {
+        return $this->item;
+    }
+
+    public function setItem(?Item $item): static
+    {
+        $this->item = $item;
 
         return $this;
     }

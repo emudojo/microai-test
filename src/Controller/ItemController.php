@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Entity\Item;
 use App\Form\ItemType;
 use App\Repository\ItemRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/item')]
 class ItemController extends AbstractController
@@ -23,7 +26,7 @@ class ItemController extends AbstractController
     }
 
     #[Route('/new', name: 'app_item_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, FileUploader $fileUploader): Response
     {
         $item = new Item();
         $form = $this->createForm(ItemType::class, $item);
@@ -33,9 +36,17 @@ class ItemController extends AbstractController
 
             // Add user
             $item->setCreatedBy($this->getUser());
+
+            // store image
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                $image = $fileUploader->upload($imageFile);
+                $item->setImage($image);
+            }
+
             $entityManager->persist($item);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_item_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -45,6 +56,7 @@ class ItemController extends AbstractController
         ]);
     }
 
+
     #[Route('/{id}', name: 'app_item_show', methods: ['GET'])]
     public function show(Item $item): Response
     {
@@ -53,13 +65,35 @@ class ItemController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/add-to-cart', name: 'app_item_add_to_cart', methods: ['GET'])]
+    public function addTopCart(Item $item, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        // for this the cart is a session based cart to simplify the implementation
+        // but in a real world scenario it would be a database based cart
+        $cart = $request->getSession();
+        $cart->set('cart', [$item, ...$cart->get('cart', [])]);
+
+        return $this->render('cart/index.html.twig', [
+            'items' => $cart->get('cart', []),
+        ]);
+    }
+
     #[Route('/{id}/edit', name: 'app_item_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Item $item, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Item $item, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(ItemType::class, $item);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // store image
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+                $image = $fileUploader->upload($imageFile);
+                $item->setImage($image);
+            }
+            $entityManager->persist($item);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_item_index', [], Response::HTTP_SEE_OTHER);
@@ -74,7 +108,7 @@ class ItemController extends AbstractController
     #[Route('/{id}', name: 'app_item_delete', methods: ['POST'])]
     public function delete(Request $request, Item $item, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$item->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $item->getId(), $request->request->get('_token'))) {
             $entityManager->remove($item);
             $entityManager->flush();
         }

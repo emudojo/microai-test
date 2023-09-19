@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use     App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -25,14 +26,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
     #[ORM\Column(length: 120, nullable: true)]
     private ?string $name = null;
-    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Order::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private ?PersistentCollection $orders = null;
+
 
     /**
      * @var ?string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Order::class)]
+    private Collection $orders;
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+    }
 
     public function getName(): ?string
     {
@@ -44,14 +52,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->name = $name;
     }
 
-    public function getOrders(): ?Order
+    public function getOrders(): ArrayCollection|Collection
     {
         return $this->orders;
-    }
-
-    public function setOrders(?Order $orders): void
-    {
-        $this->orders = $orders;
     }
 
 
@@ -128,5 +131,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     function __toString(): string
     {
         return  $this->username;
+    }
+
+    public function addOrder(Order $order): static
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUserId() === $this) {
+                $order->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }

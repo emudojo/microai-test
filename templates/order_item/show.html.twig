@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1>OrderItem</h1>
-
-    <table class="table">
-        <tbody>
+    <div class="table-container">
+        <table class="table">
+            <tbody>
             <tr>
                 <th>Id</th>
                 <td>{{ order_item.id }}</td>
@@ -19,9 +19,9 @@
                 <th>Price</th>
                 <td>{{ order_item.price }}</td>
             </tr>
-        </tbody>
-    </table>
-
+            </tbody>
+        </table>
+    </div>
     <a href="{{ path('app_order_item_index') }}">back to list</a>
 
     <a href="{{ path('app_order_item_edit', {'id': order_item.id}) }}">edit</a>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block javascripts %}
+    {% endblock %}
+
+    <!-- Ugly hardcoded styles -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            height: 50px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+        }
+
+        nav li {
+            display: inline-block;
+        }
+
+        nav a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding-left: 20px;
+            padding-right: 20px;
+            line-height: 1px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 75%;
+            margin: auto;
+            text-align: center;
+        }
+
+        .content {
+            margin: 20px; /* adjust this value to add space between content and navbar */
+        }
+
+        @media (max-width: 720px) {
+            nav ul {
+                position: absolute;
+                top: 0;
+                left: -200px;
+                width: 100%;
+            }
+
+            nav li {
+                width: 100%;
+                display: block;
+            }
+
+            .content {
+                margin-top: 4em; /* adjust this value to add space between content and navbar */
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-user">
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a href="/login">Login</a>
+        </li>
+        <li>
+            <a href="/logout">Logout</a>
+        </li>
+    </ul>
+</nav>
+<div class="content">{% block body %}{% endblock %}</div>
+
+</body>
+</html>

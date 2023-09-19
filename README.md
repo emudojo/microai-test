@@ -1,46 +1,41 @@
-# Symfony Docker
+# Online Marketplace Platform
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
+## Scenario
 
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
+You are tasked with building an online marketplace platform that connects buyers and sellers. The platform should allow users to list items for sale, browse listings, make purchases, and leave reviews. The primary focus will be on backend development, but a basic frontend is required for user interaction.
 
-## Getting Started
+## Requirements
 
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --no-cache` to build fresh images
-3. Run `docker compose up --pull --wait` to start the project
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+### Database Setup
 
-## Features
+- ~~Create a relational database using MySQL or another database system of your choice.~~
+- ~~Design the database schema to support the following entities: users, items, and orders.~~
+- ~~Define appropriate relationships between these entities.~~
 
-* Production, development and CI ready
-* [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-* Automatic HTTPS (in dev and in prod!)
-* HTTP/2, HTTP/3 and [Preload](https://symfony.com/doc/current/web_link.html) support
-* Built-in [Mercure](https://symfony.com/doc/current/mercure.html) hub
-* [Vulcain](https://vulcain.rocks) support
-* Native [XDebug](docs/xdebug.md) integration
-* Just 2 services (PHP FPM and Caddy server)
-* Super-readable configuration
+### User Authentication
 
-**Enjoy!**
+- ~~Implement user authentication and authorization. Users should be able to register, log in, and log out.~~
 
-## Docs
+### Listing Items
 
-1. [Build options](docs/build.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [TLS Certificates](docs/tls.md)
-7. [Using a Makefile](docs/makefile.md)
-8. [Troubleshooting](docs/troubleshooting.md)
+- ~~Sellers can list items for sale, providing details such as title, description, price, product expiry date, and upload images.~~
+- Implement image upload and storage.
 
-## License
+### Item Listings
 
-Symfony Docker is available under the MIT License.
+- ~~Create a page to display all item listings with details (title, description, price, and seller information).~~
+- Implement pagination, searching & sorting for the item listings.
 
-## Credits
+### Checkout and Orders
 
-Created by [Kévin Dunglas](https://dunglas.fr), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+- Implement a checkout process where users can place orders for items in their cart.
+- Create an order record in the database with details like the order date, user information, and item details.
+- Deduct the purchased items from the available quantities.
+
+### Bonus Task
+
+#### Shopping Cart
+
+- Allow users to add items to their shopping cart, view the cart, and remove items.
+- Implement the calculation of the total cost of items in the cart.
+- Remove the products after the expiry date has passed.
